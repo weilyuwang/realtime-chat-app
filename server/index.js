@@ -1,6 +1,7 @@
 import express from "express";
 import socketio from "socket.io";
 import http from "http";
+import cors from "cors";
 import router from "./router.js";
 import { addUser, removeUser, getUser, getUsersInRoom } from "./users.js";
 
@@ -9,6 +10,7 @@ const PORT = process.env.PORT || 5000;
 const app = express();
 
 app.use(router);
+app.use(cors());
 
 const server = http.createServer(app);
 const io = socketio(server);
