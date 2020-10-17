@@ -22,7 +22,7 @@ const removeUser = (id) => {
   const userIndex = users.findIndex((user) => user.id === id);
   if (userIndex !== -1) {
     // Removes the user from the users array
-    return users.splice(index, 1)[0];
+    return users.splice(userIndex, 1)[0];
   }
 };
 
