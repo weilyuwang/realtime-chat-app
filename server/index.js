@@ -17,7 +17,6 @@ const io = socketio(server);
 io.on("connection", (socket) => {
   socket.on("join", ({ name, room }, callback) => {
     const { error, user } = addUser({ id: socket.id, name, room });
-    console.log(`${user.name} added to room ${user.room}`);
 
     if (error) return callback(error);
 
@@ -34,6 +33,12 @@ io.on("connection", (socket) => {
     });
 
     socket.join(user.room);
+
+    // Send current room info to client
+    io.to(user.room).emit("roomData", {
+      room: user.room,
+      users: getUsersInRoom(user.room),
+    });
 
     callback();
   });
@@ -54,6 +59,12 @@ io.on("connection", (socket) => {
       io.to(user.room).emit("message", {
         user: "admin",
         text: `${user.name} has left`,
+      });
+
+      // Send updated room info to client
+      io.to(user.room).emit("roomData", {
+        room: user.room,
+        users: getUsersInRoom(user.room),
       });
     }
   });
